@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1537325281051.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "618305978",
+    "id" : "F49404E1",
+    "lastKnownWriteTime" : 1537324556,
+    "last_content_update" : 1537324556,
+    "path" : "~/ETC1010/Kevan/lecture9a_networks.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "9,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -2,6 +2,23 @@
 title: "Project Data Cleaning"
 output: html_notebook
 ---
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = TRUE,   
+                      message = FALSE,
+                      warning = FALSE,
+                      collapse = TRUE,
+                      fig.height = 6,
+                      fig.width = 6,
+                      fig.align = "center",
+                      cache = FALSE)
+tutorial_html_dependency()
+library(tidyverse)
+library(plotly)
+library(readxl)
+library(visdat)
+```
+
 
 ```{r}
 all <- read_xlsx("data/Quarterly median rents by local government area - March quarter 2018.xlsx",sheet = 7)
@@ -21,6 +38,8 @@ all_f <- all %>% gather(variable, values, -Suburb) %>% arrange(Suburb)
 all_f <- all_f %>% separate(variable, c("month","year","type"),by="_")
 all_medianp <- all_f %>% filter(type == "Median")
 all_counts <- all_f %>% filter(type == "Count")
+
+vis_dat(all)
 ```
 
 ```{r}
