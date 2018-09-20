@@ -1,0 +1,20 @@
+"0","library(ggmap)"
+"2","Google Maps API Terms of Service: http://developers.google.com/maps/terms.
+"
+"2","Please cite ggmap if you use it: see citation('ggmap') for details.
+"
+"2","
+Attaching package: ‘ggmap’
+
+"
+"2","The following object is masked from ‘package:plotly’:
+
+    wind
+
+"
+"0","all_medianp_2018 <- all_medianp %>% filter(year == 2018)"
+"0","map <- get_map(location =c(lat =-37.814,lon = 144.96332), zoom=9)"
+"2","note : locations should be specified in the lon/lat format, not lat/lon.
+"
+"2","Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=-37.814,144.96332&zoom=9&size=640x640&scale=2&maptype=terrain&language=en-EN&sensor=false
+"
