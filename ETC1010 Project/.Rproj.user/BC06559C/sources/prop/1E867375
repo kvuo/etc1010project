@@ -1,6 +1,7 @@
 {
     "chunk_output_type" : "inline",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "cursorPosition" : "42,0",
     "last_setup_crc32" : "BFB914259a761317",
     "scrollLine" : "10"
@@ -9,4 +10,9 @@
     "last_setup_crc32" : "3A8F58079a761317",
     "scrollLine" : "0"
 >>>>>>> parent of f683cf7... location data added
+=======
+    "cursorPosition" : "29,19",
+    "last_setup_crc32" : "6CAFBDAA1c1cb20a",
+    "scrollLine" : "4"
+>>>>>>> parent of b8f6773... Revert "Merge branch 'master' of https://github.com/kvuo/etc1010project"
 }
