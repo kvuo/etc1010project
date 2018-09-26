@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1537932256723.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1963175063",
+    "id" : "5133F665",
+    "lastKnownWriteTime" : 1537934105,
+    "last_content_update" : 1537934105495,
+    "path" : "~/GitHub/etc1010project/ETC1010 Project/DataProject.Rmd",
+    "project_path" : "DataProject.Rmd",
+    "properties" : {
+        "cursorPosition" : "32,28",
+        "last_setup_crc32" : "5B11BE5B1c1cb20a",
+        "scrollLine" : "4"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

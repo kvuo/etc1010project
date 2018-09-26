@@ -1,0 +1,7 @@
+"0","key <- ""AIzaSyCYcqqN46Al-dZCrpH_keT6n7yNoW20Rus"""
+"0","lganames <- read.dbf(""data/VIC_LGA_POLYGON_shp.dbf"")"
+"0","lgapoly <- readShapePoly(""data/VIC_LGA_POLYGON_shp.shp"")"
+"0","lgamap <- get_map(c(lon = 144.7852, lat = -37.4713), zoom=5)"
+"2","Error in download.file(url, destfile = tmp, quiet = !messaging, mode = ""wb"") : 
+  cannot open URL 'http://maps.googleapis.com/maps/api/staticmap?center=-37.4713,144.7852&zoom=5&size=640x640&scale=2&maptype=terrain&language=en-EN&sensor=false'
+"
