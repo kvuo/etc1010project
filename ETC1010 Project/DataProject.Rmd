@@ -1,8 +1,6 @@
 ---
 title: "Project Data Cleaning"
-output:
-  html_document:
-    df_print: paged
+output: html_notebook
 ---
 ```{r setup, include=FALSE}
 library(learnr)
@@ -19,26 +17,6 @@ library(tidyverse)
 library(plotly)
 library(readxl)
 library(visdat)
-library(foreign)
-library(maptools)
-library(ggmap)
-```
-
-```{r}
-lganames <- read.dbf("data/VIC_LGA_POLYGON_shp.dbf")
-lgapoly <- readShapePoly("data/VIC_LGA_POLYGON_shp.shp")
-#lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=5)
-ggmap(lgapoly) +
-  geom_polygon(aes(x = long,
-      y = lat,
-      group = group),
-    data = area.points,
-    color = colors[9],
-    fill = colors[6],
-    alpha = 0.5) +
-labs(x = "Longitude",
-  y = "Latitude")
-#oz <- get_map(location=c(lon=133.8807,lat=-23.6980),zoom=4)
 ```
 
 
