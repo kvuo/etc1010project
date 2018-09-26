@@ -104,3 +104,6 @@
 "0","library(plotly)"
 "0","library(readxl)"
 "0","library(visdat)"
+"0","library(foreign)"
+"0","library(maptools)"
+"0","library(ggmap)"
