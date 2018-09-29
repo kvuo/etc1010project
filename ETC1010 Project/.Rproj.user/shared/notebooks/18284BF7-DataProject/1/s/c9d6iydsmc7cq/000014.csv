@@ -1,6 +1,0 @@
-"0","#lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=5)
-oz <- get_map(location=c(lon=133.8807,lat=-23.6980),zoom=4)
-"
-"2","Error in download.file(url, destfile = tmp, quiet = !messaging, mode = ""wb"") : 
-  cannot open URL 'http://maps.googleapis.com/maps/api/staticmap?center=-23.698,133.8807&zoom=4&size=640x640&scale=2&maptype=terrain&language=en-EN&sensor=false'
-"
