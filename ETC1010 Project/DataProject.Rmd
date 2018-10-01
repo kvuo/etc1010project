@@ -25,10 +25,10 @@ library(ggmap)
 library(plyr)
 ```
 
-```{r}
+```{r eval = FALSE}
 lganames <- read.dbf("data/VIC_LGA_POLYGON_shp.dbf")
 lgapoly <- readShapePoly("data/VIC_LGA_POLYGON_shp.shp")
-#lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=5)
+lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=5)
 ggmap(lgapoly) +
   geom_polygon(aes(x = long,
       y = lat,
@@ -47,7 +47,8 @@ labs(x = "Longitude",
 all <- read_xlsx("data/Quarterly median rents by local government area - March quarter 2018.xlsx",sheet = 7)
 head(all)
 all <- all[,-1]
-all <- all %>% rename("Suburb" = "X__2")
+#all <- all %>% rename("Suburb" = "X__2")
+colnames(all)[1] <- "Suburb"
 
 vec1 <- seq(2,ncol(all),2)
 vec2 <- seq(3,ncol(all),2)
@@ -79,9 +80,9 @@ LGACouncil <- LGACouncil[,c(1,4,7)]
 
 #match the coordinate with the LGA
 LGAjoin <- left_join(LGACouncil,LatLon, by='Postcode')
-LGA_mod <- LGAjoin %>% group_by(LGA) %>% mutate(avg_lat = mean(lat),avg_lon = mean(lon))
-LGA <- LGA_mod[!duplicated(LGA_mod$LGA),]
-LGA <- LGA[,-c(1,4,5,6)]
+#LGA_mod <- LGAjoin %>% group_by(Name) %>% mutate(avg_lat = mean(lat),avg_lon = mean(lon))
+LGA <- LGAjoin[!duplicated(LGA_mod$LGA),]
+LGA <- LGA[,-c(1,4)]
 LGA <- LGA[,c(2,1,3,4)]
 LGA <- LGA %>% separate(LGA,sep="[(]",c("LGA","Index"))
 
@@ -92,7 +93,8 @@ LGA <- LGA[,-2]
 
 ```
 
-```{r}
+```{r eval = FALSE}
+library(plotly)
 all_medianp_2018 <- all_medianp %>% filter(year == 2018)
 all_medianp_2018 <- all_medianp_2018 %>% mutate(LGA = Suburb)
 all_medianp_2018 <- all_medianp_2018[,c(6,2,3,4,5)]
@@ -101,8 +103,10 @@ LGA <- LGA %>% arrange(LGA)
 all_medianp_2018 <- all_medianp_2018 %>% arrange(LGA)
 loc_2018 <- right_join(LGA,all_medianp_2018,by='LGA')
 
-vic <- get_map(location=c(lon=133.8807, lat=-23.6980), zoom=4)
-ggmap(vic) + 
-  geom_point(data=loc_2018, aes(x=lon, y=lat), 
-              alpha=0.5, colour=values, size=0.5)
+library(plotly)
+vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=9)
+m <- ggmap(vic) + 
+  geom_point(data=loc_2018, aes(x=lon, y=lat,label = values), 
+              alpha=1, colour='red', size=0.5)
+ggplotly(m)
 ```
