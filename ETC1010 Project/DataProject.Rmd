@@ -23,6 +23,7 @@ library(foreign)
 library(maptools)
 library(ggmap)
 library(plyr)
+library(lubridate)
 ```
 
 ```{r eval = FALSE}
@@ -101,7 +102,6 @@ LGA <- LGA[,-2]
 ```
 
 ```{r eval = FALSE}
-library(plotly)
 all_medianp_2018 <- all_medianp %>% filter(year == 2018)
 all_medianp_2018 <- all_medianp_2018 %>% mutate(LGA = Suburb)
 all_medianp_2018 <- all_medianp_2018[,c(6,2,3,4,5)]
@@ -110,7 +110,6 @@ LGA <- LGA %>% arrange(LGA)
 all_medianp_2018 <- all_medianp_2018 %>% arrange(LGA)
 loc_2018 <- right_join(LGA,all_medianp_2018,by='LGA')
 
-library(plotly)
 vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=9)
 m <- ggmap(vic) + 
   geom_point(data=loc_2018, aes(x=lon, y=lat,label = values), 
