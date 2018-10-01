@@ -28,7 +28,7 @@ library(plyr)
 ```{r eval = FALSE}
 lganames <- read.dbf("data/VIC_LGA_POLYGON_shp.dbf")
 lgapoly <- readShapePoly("data/VIC_LGA_POLYGON_shp.shp")
-lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=5)
+lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=9)
 ggmap(lgapoly) +
   geom_polygon(aes(x = long,
       y = lat,
@@ -110,7 +110,19 @@ m <- ggmap(vic) +
               alpha=1, colour='red', size=0.5)
 ggplotly(m)
 ```
-```{r}
 
+
+
+
+
+```{r}
+agegroup_2017 <- read_xls("data/2017.xls",sheet = "Table 3") 
+agegroup_2017<-agegroup_2017[-c(1:8),-c(1)]
+agegroup_2017<-agegroup_2017[,-c(2:6)]
+agegroup_2017<-agegroup_2017[,-c(3:4)] 
+agegroup_2017<-agegroup_2017 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21)) %>%
+  filter(state=="Victoria")
 ```
+
 
