@@ -28,7 +28,14 @@ library(plyr)
 ```{r eval = FALSE}
 lganames <- read.dbf("data/VIC_LGA_POLYGON_shp.dbf")
 lgapoly <- readShapePoly("data/VIC_LGA_POLYGON_shp.shp")
-lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=9)
+lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=6)
+
+library(RColorBrewer)
+colors <- brewer.pal(9, "BuGn")
+
+lgapoly.points <- fortify(lgapoly)
+ggmap(lgamap) +
+lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=5)
 ggmap(lgapoly) +
   geom_polygon(aes(x = long,
       y = lat,
@@ -111,7 +118,18 @@ m <- ggmap(vic) +
 ggplotly(m)
 ```
 
+```{r}
+testvar <- all_medianp %>%  
+  mutate(date=paste("01-",month,"-",year)) %>% 
+  mutate(date=dmy(date)) %>% 
+  select("Suburb","values","date") %>%
+  mutate(values=as.numeric(values))
+#glimpse(testvar)
+ticks<-c(100,200,300,400,500,600)
+testgraph <- testvar %>% ggplot(aes(x=date,y=values,colour=Suburb,yaxt="n"))+geom_smooth(se=FALSE)#+geom_point()+geom_smooth(se=FALSE)#+scale_y_discrete(limits=600)
 
+ggplotly(testgraph)
+```
 
 
 
