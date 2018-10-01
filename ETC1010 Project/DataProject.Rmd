@@ -29,19 +29,17 @@ library(lubridate)
 ```{r eval = FALSE}
 lganames <- read.dbf("data/VIC_LGA_POLYGON_shp.dbf")
 lgapoly <- readShapePoly("data/VIC_LGA_POLYGON_shp.shp")
-lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=6)
 
 library(RColorBrewer)
 colors <- brewer.pal(9, "BuGn")
 
 lgapoly.points <- fortify(lgapoly)
+lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=6)
 ggmap(lgamap) +
-lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=5)
-ggmap(lgapoly) +
   geom_polygon(aes(x = long,
       y = lat,
       group = group),
-    data = area.points,
+    data = lgapoly.points,
     color = colors[9],
     fill = colors[6],
     alpha = 0.5) +
@@ -125,7 +123,7 @@ testvar <- all_medianp %>%
   mutate(values=as.numeric(values))
 #glimpse(testvar)
 ticks<-c(100,200,300,400,500,600)
-testgraph <- testvar %>% ggplot(aes(x=date,y=values,colour=Suburb,yaxt="n"))+geom_smooth(se=FALSE)#+geom_point()+geom_smooth(se=FALSE)#+scale_y_discrete(limits=600)
+testgraph <- testvar %>% ggplot(aes(x=date,y=values,colour=Suburb,yaxt="n"))+geom_line() #geom_smooth(se=FALSE)#+geom_point()+geom_smooth(se=FALSE)#+scale_y_discrete(limits=600)
 
 ggplotly(testgraph)
 ```
