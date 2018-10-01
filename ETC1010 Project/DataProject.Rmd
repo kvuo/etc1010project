@@ -249,7 +249,14 @@ agegroup_2007<-agegroup_2007 %>%
 ```
 
 
-
+```{r}
+abslgadata1 <- read_csv("data/ABS_REGIONAL_LGA2017-enp1.csv")
+abslgadata2 <- read_csv("data/ABS_REGIONAL_LGA2017-enp2.csv")
+abslgadata <- rbind(abslgadata1,abslgadata2) %>% select(-MEASURE,-REGIONTYPE,-`Geography Level`,-LGA_2017,-FREQUENCY,-Frequency,-TIME,-`Flag Codes`,-Flags)
+#unique(abslgadata$`Data item`) #Shows unique data items within abslgadata
+#unique(abslgadata$Region) #Shows unique LGAs within abslgadata
+glimpse(abslgadata)
+```
 
 
 
