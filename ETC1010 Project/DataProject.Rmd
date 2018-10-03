@@ -136,7 +136,7 @@ agegroup_2017<-agegroup_2017[-c(1:8),-c(1)]
 agegroup_2017<-agegroup_2017[,-c(2:6)]
 agegroup_2017<-agegroup_2017[,-c(3:4)] 
 agegroup_2017<-agegroup_2017 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21)) %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'pop'=c(21)) %>%
   filter(state=="Victoria")
 ```
 
@@ -258,10 +258,30 @@ abslgadata <- rbind(abslgadata1,abslgadata2) %>% select(-MEASURE,-REGIONTYPE,-`G
 glimpse(abslgadata)
 ```
 
+```{r}
+pop_2017<-agegroup_2017 %>%
+  mutate(pop = as.numeric(pop)) %>%
+  group_by(LGA) %>%
+  dplyr::summarise(pop = sum(pop, na.rm = TRUE))
+ggplot(pop_2017, aes(x=pop, y=LGA)) +geom_point()
+```
+```{r}
+popdis_2017<-full_join(pop_2017, LGA, by=c("LGA"="LGA")) %>%
+  filter(!is.na(lat), !is.na(lon), !is.na(pop))
+ggplot(popdis_2017) +
+    geom_polygon(aes(lon, lat, fill = pop)) +
+    coord_map("bonne", parameters=45) +
+    ggthemes::theme_map()
+```
 
 
 
 
 
+#plot the population distribution in a map
+#plot the rental prices distribution in a map
+#combine the population and rental prices distribution 
 
+
+  
 
