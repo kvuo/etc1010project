@@ -277,8 +277,8 @@ vis_dat(abslgadata_spreadbyyear,warn_large_data=FALSE)
 ```
 ```{r, "Kevan's section 3"}
 #we then remove the data that has less than 6 data points and see what information we're left with. we do not wish to impute the missing values as it may be making the incorrect assumption that the change of all these data items are related to each other per LGA. 
-abslgadata_countyears <- abslgadata %>% group_by(`Data item`,Region) %>% summarise(count = count(Value))
-abslgadata_countyears
+abslgadata_countyears <- abslgadata %>% group_by(`Data item`,Region) %>% summarise(no_years = sum(!is.na(Time))) #%>% dplyr::summarise(count = dplyr::count(Time))
+glimpse(abslgadata_countyears)
                                                                                    
 ```
 
