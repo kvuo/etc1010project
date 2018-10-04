@@ -26,6 +26,7 @@ library(plyr)
 library(lubridate)
 library(rpart)
 library(rpart.plot)
+library(regex)
 ```
 
 ```{r eval = FALSE}
@@ -239,10 +240,24 @@ agegroup_2007<-agegroup_2007 %>%
 ```{r}
 abslgadata1 <- read_csv("data/ABS_REGIONAL_LGA2017-enp1.csv")
 abslgadata2 <- read_csv("data/ABS_REGIONAL_LGA2017-enp2.csv")
-abslgadata <- rbind(abslgadata1,abslgadata2) %>% select(-MEASURE,-REGIONTYPE,-`Geography Level`,-LGA_2017,-FREQUENCY,-Frequency,-TIME,-`Flag Codes`,-Flags)
-#unique(abslgadata$`Data item`) #Shows unique data items within abslgadata
-#unique(abslgadata$Region) #Shows unique LGAs within abslgadata
-glimpse(abslgadata)
+abslgaviclgas <- read_xlsx("data/abslgaviclgas.xlsx")
+abslgadata <- rbind(abslgadata1,abslgadata2) 
+#we want to remove anything related to age, gender or race as this is another part of the analysis
+abslgadata <- abslgadata[!grepl("ERP",abslgadata$MEASURE),] #population data
+abslgadata <- abslgadata[!grepl("CENSUS",abslgadata$MEASURE),] #census data
+abslgadata <- abslgadata[!grepl("BD",abslgadata$MEASURE),] #birth/death data
+#remove unnecessary columns
+abslgadata <- abslgadata %>% select(-REGIONTYPE,-`Geography Level`,-LGA_2017,-FREQUENCY,-Frequency,-TIME,-`Flag Codes`,-Flags)
+#identify victorian lgas
+abslgaviclgas <- abslgaviclgas %>% mutate (VIC_LGAS=sub("(.*)\\s.*","\\1",VIC_LGAS)) %>% mutate (VIC_LGAS=sub("(.*)\\s.*","\\1",VIC_LGAS)) %>% mutate (VIC_LGAS=sub("(.*)\\s.*","\\1",VIC_LGAS))
+#filter out all the data points which are not related to victoria
+absviclgadata <- filter(abslgadata,Region %in% abslgaviclgas$VIC_LGAS)
+as.tibble(unique(absviclgadata$`Data item`)) #Shows unique data items within abslgadata
+#this tells us that there are 398 unique data items
+as.tibble(unique(absviclgadata$Region)) #Shows unique LGAs within abslgadata
+#this tells us that there are 552 unique LGAs
+#abslgadata <- abslgadata %>% 
+glimpse(absviclgadata)
 ```
 
 
@@ -269,17 +284,37 @@ ggplotly(medianrentps_rp_plot)
 
 ```{r, kevan's section 3}
 #the types of data given by the ABS regional data is numerous.
-as_tibble(unique(abslgadata$`Data item`))
+#as_tibble(unique(absviclgadata$`Data item`))
 #this shows that there are a total of 398 different data items! majority of this data is collected annually, however some of these data items have missing data items
-abslgadata_spreadbyyear <- abslgadata %>% spread(key=Time,value=Value)
-vis_dat(abslgadata_spreadbyyear,warn_large_data=FALSE)
+absviclgadata_spreadbyyear <- absviclgadata %>% spread(key=Time,value=Value)
+vis_dat(absviclgadata_spreadbyyear,warn_large_data=FALSE)
 #we notice that there is a significant amount of missing data, notably in 2017. We wish to use data points with at least 6 points of data, i.e. 2011-2016. 2017 is a bonus!
 ```
 ```{r, "Kevan's section 3"}
 #we then remove the data that has less than 6 data points and see what information we're left with. we do not wish to impute the missing values as it may be making the incorrect assumption that the change of all these data items are related to each other per LGA. 
-abslgadata_countyears <- abslgadata %>% group_by(`Data item`,Region) %>% summarise(no_years = sum(!is.na(Time))) #%>% dplyr::summarise(count = dplyr::count(Time))
-glimpse(abslgadata_countyears)
-                                                                                   
+absviclgadata_countyears <- absviclgadata %>% group_by(`Data item`,Region) %>% dplyr::summarise(no_years = sum(!is.na(Time))) 
+nodataitems_g7 <- absviclgadata_countyears %>% filter(no_years>=7) %>% nrow()
+nodataitems_g6 <- absviclgadata_countyears %>% filter(no_years>=6) %>% nrow()
+nodataitems <- absviclgadata_countyears %>% nrow()
+as.tibble(list(Name=c("No. of data items with more than 7 years of data","No. of data items with more than 6 years of data","Total number of data items"),Count=c(nodataitems_g7,nodataitems_g6,nodataitems),Percentage=c(nodataitems_g7/nodataitems,nodataitems_g6/nodataitems,nodataitems/nodataitems)))
+#this tells us that there is only 2569 of 22268 data items that have 6 more more points of data. that's only about 11.54% of all data points! Even worse, only 2.4% of the data items actually have all 7 years of data! it would be possible to impute the missing values for data items with 2 or more values, however it would not be extremely accurate. Let's try and do some analysis without imputing.
+
+#first, lets find out what kind of information we have left, and how many lgas in each one.
+absviclgadata_unique_g6 <- absviclgadata_countyears %>% filter(no_years == 6) %>% group_by(`Data item`) %>% dplyr::summarise(lga_count = n())
+absviclgadata_unique_g6
+#this has left us with only 40 actual different data points, when we started with 295!! 
+absviclgadata_unique_g6 %>% filter(lga_count > 20)
+#of these 40, it must be noted that only 18 of these data items have over 300 points of data. Of these, majority of them are actually vehicle statistics. maybe this analysis should be on whether the number of vehicles in the area have a significant effect on rental price
+```
+
+```{r}
+#lets do that! it must be noted that although 6 points of data for each LGA does not provide very reliable information, however expanding this to over 500 different LGAs can provide a reasonable conclusion if there is a significant pattern between all of them.
+mvcdata <- absviclgadata %>% dplyr::filter(grepl("MVC",MEASURE)) %>% select(-MEASURE)
+#lets look at a sample of the data for one LGA, and plot it against its median rental price
+mvcdata <- mvcdata %>% mutate(Time=dmy(paste("31-12-",Time)))
+
+l <- ggplot(mvcdata,aes(x=Time,y=Value,colour=Region))+geom_line()+facet_wrap(~`Data item`)
+ggplotly(l)
 ```
 
 
