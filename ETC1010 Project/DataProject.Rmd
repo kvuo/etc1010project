@@ -75,7 +75,7 @@ all_counts <- all_f %>% filter(type == "Count")
 vis_dat(all)
 ```
 
-```{r}
+```{r "Hongrui's section"}
 # to retrieve the average lat and lon from the files
 LGACouncil <- read_csv("data/fileslocalgovt.csv")
 LatLon <- read_csv("data/Australian_Post_Codes_Lat_Lon 2.csv")
@@ -102,7 +102,7 @@ LGA <- LGA[,-2]
 
 ```
 
-```{r eval = FALSE}
+```{r eval = FALSE "Hongrui's section"}
 all_medianp_2018 <- all_medianp %>% filter(year == 2018)
 all_medianp_2018 <- all_medianp_2018 %>% mutate(LGA = Suburb)
 all_medianp_2018 <- all_medianp_2018[,c(6,2,3,4,5)]
@@ -111,12 +111,31 @@ LGA <- LGA %>% arrange(LGA)
 all_medianp_2018 <- all_medianp_2018 %>% arrange(LGA)
 loc_2018 <- right_join(LGA,all_medianp_2018,by='LGA')
 
-vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=9)
+vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=8)
 m <- ggmap(vic) + 
   geom_point(data=loc_2018, aes(x=lon, y=lat,label = values), 
               alpha=1, colour='red', size=0.5)
 ggplotly(m)
 ```
+
+```{r}
+#look at historical rental price reacted to the Australian economy
+gdp <- read_csv("data/GDP.csv")
+gdp <- gdp %>% filter(LOCATION == "AUS")
+gdp <- gdp[,c(1,6,7)]
+gdp_plot <- gdp %>% ggplot(aes(x=TIME,y=Value))+geom_line()
+ggplotly(gdp_plot)
+
+# compute the eco growth rate
+gdp_slope <- gdp %>% mutate(volume = Value - lag(Value, default = Value[1]))
+gdp_slope <- gdp_slope %>% mutate(rate = volume / lag(Value, default = Value[1]))
+rate_plot <- gdp_slope %>% ggplot(aes(x=TIME,y=rate))+geom_line()
+ggplotly(rate_plot)
+
+#as we can see, when there is a decrease on economics growth, there will be a boost on rental price, referring to Kevon's medianrentps_plot, as it's shown in year 2007 - 2008, and 2011 - 2012
+```
+
+
 
 ```{r}
 agegroup_2017 <- read_xls("data/2017.xls",sheet = "Table 3") 
