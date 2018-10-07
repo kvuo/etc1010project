@@ -86,7 +86,7 @@ LGACouncil <- LGACouncil[,c(1,4,7)]
 
 #match the coordinate with the LGA
 LGAjoin <- left_join(LGACouncil,LatLon, by='Postcode')
-#LGA_mod <- LGAjoin %>% group_by(Name) %>% mutate(avg_lat = mean(lat),avg_lon = mean(lon))
+LGA_mod <- LGAjoin %>% group_by(Name) %>% mutate(avg_lat = mean(lat),avg_lon = mean(lon))
 LGA <- LGAjoin[!duplicated(LGA_mod$LGA),]
 LGA <- LGA[,-c(1,4)]
 LGA <- LGA[,c(2,1,3,4)]
@@ -96,7 +96,6 @@ LGA <- LGA %>% separate(LGA,sep="[(]",c("LGA","Index"))
 trim.trailing <- function (x) sub("\\s+$", "", x)
 LGA$LGA <- trim.trailing(LGA$LGA)
 LGA <- LGA[,-2]
-
 ```
 
 ```{r eval = FALSE}
@@ -107,6 +106,9 @@ all_medianp_2018 <- all_medianp_2018[,c(6,2,3,4,5)]
 LGA <- LGA %>% arrange(LGA)
 all_medianp_2018 <- all_medianp_2018 %>% arrange(LGA)
 loc_2018 <- right_join(LGA,all_medianp_2018,by='LGA')
+
+loc_2018 <- loc_2018 %>% filter(LGA != 'Group Total' & LGA != 'Metro' & LGA != 'Non-Metro' & LGA != 'Victoria')
+loc_2018$LGA[loc_2018$LGA  == 'Mornington Penin\'a'] <- "Mornington Peninsula"
 
 vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=9)
 m <- ggmap(vic) + 
@@ -265,23 +267,57 @@ pop_2017<-agegroup_2017 %>%
   dplyr::summarise(pop = sum(pop, na.rm = TRUE))
 ggplot(pop_2017, aes(x=pop, y=LGA)) +geom_point()
 ```
+#plot the population distribution in a map
 ```{r}
 popdis_2017<-full_join(pop_2017, LGA, by=c("LGA"="LGA")) %>%
   filter(!is.na(lat), !is.na(lon), !is.na(pop))
-ggplot(popdis_2017) +
-    geom_polygon(aes(lon, lat, fill = pop)) +
-    coord_map("bonne", parameters=45) +
-    ggthemes::theme_map()
+lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=6)
+ggmap(lgamap) +geom_point(popdis_2017, aes(x=lon,y=lat,colour=pop), size=4, alpha=0.7)+
+  scale_colour_distiller(palette="YlOrRd")
 ```
 
 
-
-
-
-#plot the population distribution in a map
 #plot the rental prices distribution in a map
+```{r}
+rent2017<-filter(all_medianp, year=="2017") %>%
+  mutate(values=as.numeric(values), Suburb=as.factor(Suburb)) %>%
+  group_by(Suburb) %>% dplyr::summarise(n = mean(values, na.rm = TRUE))
+left_join(rent2017, LGA, by=c("Suburb"="LGA")) %>%
+  select(Suburb, n, lat, lon) %>%
+  filter(!is.na(lat),!is.na(lon))
+lgamap <- get_map(location=c(144.9631, -37.8136), zoom=14)
+ggmap(lgamap) +geom_point(aes(x=lat,y=lon,colour=n), size=4, alpha=0.7)+
+  scale_colour_distiller(palette="YlOrRd")
+rent2017
+```
 #combine the population and rental prices distribution 
 
 
   
+
+
+
+
+
+
+
+
+
+
+=======
+get_distance = read_csv('data/LGA_Profile_2014_beta.csv')
+get_distance <- get_distance[,c(2,9)]
+get_distance <- get_distance %>% separate(LGA, sep = "[()]",c("LGA","index"))
+
+get_distance$LGA <- trim.trailing(get_distance$LGA)
+get_distance <- get_distance[,-2]
+glimpse(get_distance)
+
+loc_2018_added_dis <- left_join(loc_2018,get_distance,by = "LGA")
+
+p <- ggplot(loc_2018_added_dis, aes(x=Distance_to_Melbourne_in_km, y=values,label = LGA)) + geom_point() + ylab("Rental Price") + ggtitle("Price changed by distance to Melbourne CBD in 2018")
+
+ggplotly(p)
+>>>>>>> eef71a3b2db5e21cfbd82bb67a8d2617180af088
+```
 
