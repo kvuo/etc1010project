@@ -102,6 +102,7 @@ LGA <- LGA[,-2]
 ```
 
 ```{r eval = FALSE "Hongrui's section"}
+#plot the LGA in the map of victoria alongsied with its median price in 2018 Mar
 all_medianp_2018 <- all_medianp %>% filter(year == 2018)
 all_medianp_2018 <- all_medianp_2018 %>% mutate(LGA = Suburb)
 all_medianp_2018 <- all_medianp_2018[,c(6,2,3,4,5)]
@@ -323,10 +324,11 @@ ggplotly(l)
 gdp <- read_csv("data/GDP.csv")
 gdp <- gdp %>% filter(LOCATION == "AUS")
 gdp <- gdp[,c(1,6,7)]
+#historical gdp plot
 gdp_plot <- gdp %>% ggplot(aes(x=TIME,y=Value))+geom_line()
 ggplotly(gdp_plot)
 
-# compute the eco growth rate
+# compute the gdp growth rate
 gdp_slope <- gdp %>% mutate(volume = Value - lag(Value, default = Value[1]))
 gdp_slope <- gdp_slope %>% mutate(rate = volume / lag(Value, default = Value[1]))
 rate_plot <- gdp_slope %>% ggplot(aes(x=TIME,y=rate))+geom_line()
@@ -335,6 +337,7 @@ ggplotly(rate_plot)
 #as we can see, when there is a decrease on economics growth, there will be a boost on rental price, referring to Kevon's medianrentps_plot, as it's shown in year 2007 - 2008, and 2011 - 2012
 ```
 ```{r "Hongrui's section"}
+# compute the distance from LGA to Melbourne city, and see if there is anything to do with rental price.
 distance <- read_csv("data/LGA_Profile_2014_beta.csv")
 distance <- distance[,c(2,9)]
 distance <- distance %>% separate(LGA,sep="[(]",c("LGA","Index"))
@@ -352,6 +355,18 @@ dis_price_join <- left_join(all_medianp_avg,distance,by='LGA')
 
 dis <- ggplot(dis_price_join,aes(x=Distance_to_Melbourne_in_km,y=values)) + geom_point()
 ggplotly(dis)
+```
+```{r "Hongrui's seciton""}
+
+all_counts_mod <- all_counts %>%
+  filter(Suburb != 'Metro',Suburb != 'Non-Metro', Suburb != 'Group Total', Suburb != 'Victoria',Suburb != 'Melbourne')
+medianrentcts <- all_counts_mod%>%  
+  mutate(date=paste("01-",month,"-",year)) %>% 
+  mutate(date=dmy(date)) %>% 
+  select("Suburb","values","date") %>%
+  mutate(values=as.numeric(values))
+medianrentcts_plot <- medianrentcts %>% ggplot(aes(x=date,y=values,colour=Suburb))+geom_line()
+ggplotly(medianrentcts_plot)
 ```
 
 
