@@ -5,7 +5,6 @@ output:
     df_print: paged
 ---
 ```{r setup, include=FALSE}
-library(learnr)
 knitr::opts_chunk$set(echo = TRUE,   
                       message = FALSE,
                       warning = FALSE,
@@ -14,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 6,
                       fig.align = "center",
                       cache = FALSE)
-tutorial_html_dependency()
+#tutorial_html_dependency()
 library(tidyverse)
 library(plotly)
 library(readxl)
@@ -51,7 +50,7 @@ labs(x = "Longitude",
 ```
 
 
-```{r}
+```{r echo=FALSE}
 all <- read_xlsx("data/Quarterly median rents by local government area - March quarter 2018.xlsx",sheet = 7)
 head(all)
 all <- all[,-1]
@@ -74,7 +73,7 @@ all_counts <- all_f %>% filter(type == "Count")
 vis_dat(all)
 ```
 
-```{r "Hongrui's section"}
+```{r echo=FALSE,"Hongrui's section1"}
 # to retrieve the average lat and lon from the files
 LGACouncil <- read_csv("data/fileslocalgovt.csv")
 LatLon <- read_csv("data/Australian_Post_Codes_Lat_Lon 2.csv")
@@ -101,7 +100,7 @@ LGA <- LGA[,-2]
 
 ```
 
-```{r eval = FALSE "Hongrui's section"}
+```{r echo = FALSE, eval=FALSE ,"Hongrui's section2"}
 #plot the LGA in the map of victoria alongsied with its median price in 2018 Mar
 all_medianp_2018 <- all_medianp %>% filter(year == 2018)
 all_medianp_2018 <- all_medianp_2018 %>% mutate(LGA = Suburb)
@@ -111,7 +110,7 @@ LGA <- LGA %>% arrange(LGA)
 all_medianp_2018 <- all_medianp_2018 %>% arrange(LGA)
 loc_2018 <- right_join(LGA,all_medianp_2018,by='LGA')
 
-vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=8)
+vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=7)
 m <- ggmap(vic) + 
   geom_point(data=loc_2018, aes(x=lon, y=lat,label = values), 
               alpha=1, colour='red', size=0.5)
@@ -120,7 +119,7 @@ ggplotly(m)
 
 
 
-```{r}
+```{r echo=FALSE}
 agegroup_2017 <- read_xls("data/2017.xls",sheet = "Table 3") 
 agegroup_2017<-agegroup_2017[-c(1:8),-c(1)]
 agegroup_2017<-agegroup_2017[,-c(2:6)]
@@ -130,7 +129,7 @@ agegroup_2017<-agegroup_2017 %>%
   filter(state=="Victoria")
 ```
 
-```{r}
+```{r echo=FALSE} 
 agegroup_2016 <- read_xls("data/2006_2016.xls",sheet = "Table 6") 
 agegroup_2016<-agegroup_2016[-c(1:8),-c(1)]
 agegroup_2016<-agegroup_2016[,-c(2:6)]
@@ -139,7 +138,7 @@ agegroup_2016<-agegroup_2016 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2006 <- read_xls("data/2006_2016.xls",sheet = "Table 3") 
 agegroup_2006<-agegroup_2006[-c(1:8),-c(1)]
 agegroup_2006<-agegroup_2006[,-c(2:6)]
@@ -148,7 +147,7 @@ agegroup_2006<-agegroup_2006 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2015 <- read_xls("data/2010_2015.xls",sheet = "Table 6") 
 agegroup_2015<-agegroup_2015[-c(1:7),-c(1)]
 agegroup_2015<-agegroup_2015[,-c(2:6)]
@@ -157,7 +156,7 @@ agegroup_2015<-agegroup_2015 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2010 <- read_xls("data/2010_2015.xls",sheet = "Table 3") 
 agegroup_2010<-agegroup_2010[-c(1:7),-c(1)]
 agegroup_2010<-agegroup_2010[,-c(2:6)]
@@ -166,7 +165,7 @@ agegroup_2010<-agegroup_2010 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2014 <- read_xls("data/2009_2014.xls",sheet = "Table 6") 
 agegroup_2014<-agegroup_2014[-c(1:8),-c(1)]
 agegroup_2014<-agegroup_2014[,-c(2:6)]
@@ -175,7 +174,7 @@ agegroup_2014<-agegroup_2014 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2009 <- read_xls("data/2009_2014.xls",sheet = "Table 3") 
 agegroup_2009<-agegroup_2009[-c(1:8),-c(1)]
 agegroup_2009<-agegroup_2009[,-c(2:6)]
@@ -184,7 +183,7 @@ agegroup_2009<-agegroup_2009 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2013<- read_xls("data/2008_2013.xls",sheet = "Table 6") 
 agegroup_2013<-agegroup_2013[-c(1:8),-c(1)]
 agegroup_2013<-agegroup_2013[,-c(2:6)]
@@ -193,7 +192,7 @@ agegroup_2013<-agegroup_2013 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2008 <- read_xls("data/2008_2013.xls",sheet = "Table 3") 
 agegroup_2008<-agegroup_2008[-c(1:8),-c(1)]
 agegroup_2008<-agegroup_2008[,-c(2:6)]
@@ -202,7 +201,7 @@ agegroup_2008<-agegroup_2008 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2012 <- read_xls("data/2011_2012.xls",sheet = "Table 6") 
 agegroup_2012<-agegroup_2012[-c(1:8),-c(1)]
 agegroup_2012<-agegroup_2012[,-c(2:6)]
@@ -211,7 +210,7 @@ agegroup_2012<-agegroup_2012 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2011 <- read_xls("data/2011_2012.xls",sheet = "Table 3") 
 agegroup_2011<-agegroup_2011[-c(1:8),-c(1)]
 agegroup_2011<-agegroup_2011[,-c(2:6)]
@@ -220,7 +219,7 @@ agegroup_2011<-agegroup_2011 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2014 <- read_xls("data/2009_2014.xls",sheet = "Table 6") 
 agegroup_2014<-agegroup_2014[-c(1:8),-c(1)]
 agegroup_2014<-agegroup_2014[,-c(2:6)]
@@ -229,7 +228,7 @@ agegroup_2014<-agegroup_2014 %>%
   select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
 ```
 
-```{r}
+```{r echo=FALSE}
 agegroup_2007 <- read_xls("data/2007.xls",sheet = "Table 3") 
 agegroup_2007<-agegroup_2007[-c(1:8),-c(1)]
 agegroup_2007<-agegroup_2007[,-c(2:6)]
@@ -239,7 +238,7 @@ agegroup_2007<-agegroup_2007 %>%
 ```
 
 
-```{r}
+```{r echo=FALSE}
 abslgadata1 <- read_csv("data/ABS_REGIONAL_LGA2017-enp1.csv")
 abslgadata2 <- read_csv("data/ABS_REGIONAL_LGA2017-enp2.csv")
 abslgaviclgas <- read_xlsx("data/abslgaviclgas.xlsx")
@@ -263,7 +262,7 @@ glimpse(absviclgadata)
 ```
 
 
-```{r,kevan's section}
+```{r echo=FALSE,"kevan's section"}
 #tidy data into usable form, keeping suburb, values and date
 medianrentps <- all_medianp %>%  
   mutate(date=paste("01-",month,"-",year)) %>% 
@@ -274,7 +273,7 @@ medianrentps_plot <- medianrentps %>% ggplot(aes(x=date,y=values,colour=Suburb))
 ggplotly(medianrentps_plot)
 ```
 
-```{r, kevan's section 2}
+```{r echo=FALSE, "kevan's section 2"}
 #medianrentps <- medianrentps %>% filter(Suburb=="Bayside")
 #identify regression trees. this will help to identify regions of similar trend
 medianrentps_rp <- rpart(values~date,data=medianrentps,control=rpart.control(minsplit=3))
@@ -284,7 +283,7 @@ ggplotly(medianrentps_rp_plot)
 #applying a regression tree allows us to identify different partitions in the data. there final partition and most relevant (as it is closest to present time) begins in 01-Jun-2011. This is convenient, as the ABS has begun collecting specific regional data on LGAs beginning
 ```
 
-```{r, kevan's section 3}
+```{r echo=FALSE, "kevan's section 3"}
 #the types of data given by the ABS regional data is numerous.
 #as_tibble(unique(absviclgadata$`Data item`))
 #this shows that there are a total of 398 different data items! majority of this data is collected annually, however some of these data items have missing data items
@@ -292,7 +291,7 @@ absviclgadata_spreadbyyear <- absviclgadata %>% spread(key=Time,value=Value)
 vis_dat(absviclgadata_spreadbyyear,warn_large_data=FALSE)
 #we notice that there is a significant amount of missing data, notably in 2017. We wish to use data points with at least 6 points of data, i.e. 2011-2016. 2017 is a bonus!
 ```
-```{r, "Kevan's section 3"}
+```{r echo=FALSE, "Kevan's section 3"}
 #we then remove the data that has less than 6 data points and see what information we're left with. we do not wish to impute the missing values as it may be making the incorrect assumption that the change of all these data items are related to each other per LGA. 
 absviclgadata_countyears <- absviclgadata %>% group_by(`Data item`,Region) %>% dplyr::summarise(no_years = sum(!is.na(Time))) 
 nodataitems_g7 <- absviclgadata_countyears %>% filter(no_years>=7) %>% nrow()
@@ -309,7 +308,7 @@ absviclgadata_unique_g6 %>% filter(lga_count > 20)
 #of these 40, it must be noted that only 18 of these data items have over 300 points of data. Of these, majority of them are actually vehicle statistics. maybe this analysis should be on whether the number of vehicles in the area have a significant effect on rental price
 ```
 
-```{r}
+```{r echo=FALSE}
 #lets do that! it must be noted that although 6 points of data for each LGA does not provide very reliable information, however expanding this to over 500 different LGAs can provide a reasonable conclusion if there is a significant pattern between all of them.
 mvcdata <- absviclgadata %>% dplyr::filter(grepl("MVC",MEASURE)) %>% select(-MEASURE)
 #lets look at a sample of the data for one LGA, and plot it against its median rental price
@@ -319,7 +318,7 @@ l <- ggplot(mvcdata,aes(x=Time,y=Value,colour=Region))+geom_line()+facet_wrap(~`
 ggplotly(l)
 ```
 
-```{r "Hongrui's section"}
+```{r echo=FALSE,"Hongrui's section3"}
 #look at historical rental price reacted to the Australian economy
 gdp <- read_csv("data/GDP.csv")
 gdp <- gdp %>% filter(LOCATION == "AUS")
@@ -336,7 +335,7 @@ ggplotly(rate_plot)
 
 #as we can see, when there is a decrease on economics growth, there will be a boost on rental price, referring to Kevon's medianrentps_plot, as it's shown in year 2007 - 2008, and 2011 - 2012
 ```
-```{r "Hongrui's section"}
+```{r echo=FALSE,"Hongrui's section4"}
 # compute the distance from LGA to Melbourne city, and see if there is anything to do with rental price.
 distance <- read_csv("data/LGA_Profile_2014_beta.csv")
 distance <- distance[,c(2,9)]
@@ -356,7 +355,7 @@ dis_price_join <- left_join(all_medianp_avg,distance,by='LGA')
 dis <- ggplot(dis_price_join,aes(x=Distance_to_Melbourne_in_km,y=values)) + geom_point() + ylab("Median Rental Price")
 ggplotly(dis)
 ```
-```{r "Hongrui's seciton""}
+```{r echo=FALSE,"Hongrui's seciton5"}
 
 all_counts_mod <- all_counts %>%
   filter(Suburb != 'Metro',Suburb != 'Non-Metro', Suburb != 'Group Total', Suburb != 'Victoria',Suburb != 'Melbourne')

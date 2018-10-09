@@ -3,11 +3,22 @@ title: "Untitled"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: fill
+    vertical_layout: scroll
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(readxl)
+library(visdat)
+library(foreign)
+library(maptools)
+library(ggmap)
+library(plyr)
+library(lubridate)
+library(rpart)
+library(rpart.plot)
 ```
 
 Column {data-width=650}
@@ -15,7 +26,61 @@ Column {data-width=650}
 
 ### Chart A
 
-```{r}
+```{r echo=FALSE}
+all <- read_xlsx("data/Quarterly median rents by local government area - March quarter 2018.xlsx",sheet = 7)
+all <- all[,-1]
+#all <- all %>% rename("Suburb" = "X__2")
+colnames(all)[1] <- "Suburb"
+
+vec1 <- seq(2,ncol(all),2)
+vec2 <- seq(3,ncol(all),2)
+
+colnames(all)[vec2] <- colnames(all)[vec1]
+colnames(all)[vec1] <- paste(colnames(all)[vec2],"_Count",sep='')
+colnames(all)[vec2] <- paste(colnames(all)[vec2],"_Median",sep='')
+all <- all[-c(1,90),]
+
+all_f <- all %>% gather(variable, values, -Suburb) %>% arrange(Suburb)
+all_f <- all_f %>% separate(variable, c("month","year","type"),by="_")
+all_medianp <- all_f %>% filter(type == "Median")
+all_counts <- all_f %>% filter(type == "Count")
+
+# to retrieve the average lat and lon from the files
+LGACouncil <- read_csv("data/fileslocalgovt.csv")
+LatLon <- read_csv("data/Australian_Post_Codes_Lat_Lon 2.csv")
+LatLon <- LatLon[,c(1,2,3,6,7)]
+
+
+LatLon <- LatLon %>% filter(state == 'VIC')
+LatLon <- LatLon %>% mutate(Postcode = postcode)
+LatLon <- LatLon[,c(6,2,4,5)]
+LGACouncil <- LGACouncil[,c(1,4,7)]
+
+#match the coordinate with the LGA
+LGAjoin <- left_join(LGACouncil,LatLon, by='Postcode')
+LGA_mod <- LGAjoin %>% group_by(Name) %>% mutate(avg_lat = mean(lat),avg_lon = mean(lon))
+LGA <- LGAjoin[!duplicated(LGA_mod$LGA),]
+LGA <- LGA[,-c(1,4)]
+LGA <- LGA[,c(2,1,3,4)]
+LGA <- LGA %>% separate(LGA,sep="[(]",c("LGA","Index"))
+
+# remove trailing whitespace
+trim.trailing <- function (x) sub("\\s+$", "", x)
+LGA$LGA <- trim.trailing(LGA$LGA)
+LGA <- LGA[,-2]
+all_medianp_2018 <- all_medianp %>% filter(year == 2018)
+all_medianp_2018 <- all_medianp_2018 %>% mutate(LGA = Suburb)
+all_medianp_2018 <- all_medianp_2018[,c(6,2,3,4,5)]
+
+LGA <- LGA %>% arrange(LGA)
+all_medianp_2018 <- all_medianp_2018 %>% arrange(LGA)
+loc_2018 <- right_join(LGA,all_medianp_2018,by='LGA')
+
+# vic <- get_map(location=c(lon=144.9460, lat=-37.8150), zoom=8)
+# m <- ggmap(vic) +
+#   geom_point(data=loc_2018, aes(x=lon, y=lat,label = values),
+#               alpha=1, colour='red', size=0.5)
+# ggplotly(m)
 
 ```
 
@@ -25,12 +90,62 @@ Column {data-width=350}
 ### Chart B
 
 ```{r}
-
+#look at historical rental price reacted to the Australian economy
+gdp <- read_csv("data/GDP.csv")
+gdp <- gdp %>% filter(LOCATION == "AUS")
+gdp <- gdp[,c(1,6,7)]
+#historical gdp plot
+gdp_plot <- gdp %>% ggplot(aes(x=TIME,y=Value))+geom_line() + ggtitle("Australian Historical GDP")
+ggplotly(gdp_plot)
 ```
 
 ### Chart C
 
 ```{r}
+# compute the gdp growth rate
+gdp_slope <- gdp %>% mutate(volume = Value - lag(Value, default = Value[1]))
+gdp_slope <- gdp_slope %>% mutate(rate = volume / lag(Value, default = Value[1]))
+rate_plot <- gdp_slope %>% ggplot(aes(x=TIME,y=rate))+geom_line() + ggtitle("Australian Historical Economic Growth Rate ")
+ggplotly(rate_plot)
 
+#as we can see, when there is a decrease on economics growth, there will be a boost on rental price, referring to Kevon's medianrentps_plot, as it's shown in year 2007 - 2008, and 2011 - 2012
 ```
 
+### Chart D
+```{r}
+# compute the distance from LGA to Melbourne city, and see if there is anything to do with rental price.
+distance <- read_csv("data/LGA_Profile_2014_beta.csv")
+distance <- distance[,c(2,9)]
+distance <- distance %>% separate(LGA,sep="[(]",c("LGA","Index"))
+trim.trailing <- function (x) sub("\\s+$", "", x)
+distance$LGA <- trim.trailing(distance$LGA)
+distance <- distance[,-2]
+
+all_medianp$Suburb[all_medianp$Suburb == 'Mornington Penin\'a'] <- 'Mornington Peninsula'
+all_medianp <- all_medianp %>% filter(Suburb != 'Metro',Suburb != 'Non-Metro', Suburb != 'Group Total', Suburb != 'Victoria')
+all_medianp$values <- as.integer(all_medianp$values)
+all_medianp$values[is.na(all_medianp$values)] <- mean(all_medianp$values, na.rm = T)
+all_medianp_avg <- aggregate(all_medianp[,5],list(all_medianp$Suburb),mean)
+colnames(all_medianp_avg)[1] <- 'LGA'
+dis_price_join <- left_join(all_medianp_avg,distance,by='LGA')
+
+dis <- ggplot(dis_price_join,aes(x=Distance_to_Melbourne_in_km,y=values)) + geom_point() + ylab("Median Rental Price")
+ggplotly(dis)
+```
+
+### Chart E
+
+```{r}
+all_counts_mod <- all_counts %>%
+  filter(Suburb != 'Metro',Suburb != 'Non-Metro', Suburb != 'Group Total', Suburb != 'Victoria',Suburb != 'Melbourne')
+medianrentcts <- all_counts_mod%>%  
+  mutate(date=paste("01-",month,"-",year)) %>% 
+  mutate(date=dmy(date)) %>% 
+  select("Suburb","values","date") %>%
+  mutate(values=as.numeric(values))
+medianrentcts_plot <- medianrentcts %>% ggplot(aes(x=date,y=values,colour=Suburb))+geom_line()+ylab("count")
+ggplotly(medianrentcts_plot)
+```
+
+### Analysis
+The analysis carried out was aimed to look at if the economic condition would have an impact on rental price in victoria, and effect of the distance from the local area to Melbourne CBD to the rental price. The GFC started in 2007 along to 2008 was taken as an example, and we can notice there was downward pressure on Australian economic growth starting from 2006 to 2008. This situation was reflected in the plots of historical median rental price and count of 79 LGAs among Vcitoria, where there was a boost on the rental price. The median rental price started to climb from the beginning of 2007, which could be resulted from the desire of cash by the property owners during the low tide of the economy. As for the median count of the leased properties, we can notice there was a decrease on rental properties at the beginnig of 2007, followed by a continuously growing amout. It could be resulted from the government's low interest rate and expansionary budget which encouraged people to consume instead of putting money into the bank, and this could explain why the median count started to pick up in mid 2007 and reached a peak in 2008 where meanwihle the rental price was continuously growing. Looking at the plot, we can notice there's a negative relationship between the distance to CBD and the rental price for a certain LGA, as the CBD is meant to be the financial and economic centre, where people mostly work in. Therefore, people would desire to live closer to CBD, and the over-demanded rental properties and limited developing residential area lead to a high rental price in CBD and areas arond it. 
