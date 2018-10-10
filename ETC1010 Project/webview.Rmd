@@ -1,9 +1,9 @@
 ---
-title: "Untitled"
+title: "PLACEHOLDER"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: scroll
+    vertical_layout: fill
 ---
 
 ```{r setup, include=FALSE}
@@ -21,10 +21,12 @@ library(rpart)
 library(rpart.plot)
 ```
 
+Page1
+=======================================================================
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
+### LGA location in Vic
 
 ```{r echo=FALSE}
 all <- read_xlsx("data/Quarterly median rents by local government area - March quarter 2018.xlsx",sheet = 7)
@@ -87,7 +89,7 @@ loc_2018 <- right_join(LGA,all_medianp_2018,by='LGA')
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Australia Historical GDP 
 
 ```{r}
 #look at historical rental price reacted to the Australian economy
@@ -99,7 +101,7 @@ gdp_plot <- gdp %>% ggplot(aes(x=TIME,y=Value))+geom_line() + ggtitle("Australia
 ggplotly(gdp_plot)
 ```
 
-### Chart C
+### Australia Historical Economic Growth Rate
 
 ```{r}
 # compute the gdp growth rate
@@ -111,7 +113,7 @@ ggplotly(rate_plot)
 #as we can see, when there is a decrease on economics growth, there will be a boost on rental price, referring to Kevon's medianrentps_plot, as it's shown in year 2007 - 2008, and 2011 - 2012
 ```
 
-### Chart D
+### Rental PRice~Distance to CBD plot
 ```{r}
 # compute the distance from LGA to Melbourne city, and see if there is anything to do with rental price.
 distance <- read_csv("data/LGA_Profile_2014_beta.csv")
@@ -133,7 +135,7 @@ dis <- ggplot(dis_price_join,aes(x=Distance_to_Melbourne_in_km,y=values)) + geom
 ggplotly(dis)
 ```
 
-### Chart E
+### Historical Median counr for all LGAs
 
 ```{r}
 all_counts_mod <- all_counts %>%
@@ -147,5 +149,9 @@ medianrentcts_plot <- medianrentcts %>% ggplot(aes(x=date,y=values,colour=Suburb
 ggplotly(medianrentcts_plot)
 ```
 
+Page2
+=======================================================================
+Column {data-width=650}
+-----------------------------------------------------------------------
 ### Analysis
 The analysis carried out was aimed to look at if the economic condition would have an impact on rental price in victoria, and effect of the distance from the local area to Melbourne CBD to the rental price. The GFC started in 2007 along to 2008 was taken as an example, and we can notice there was downward pressure on Australian economic growth starting from 2006 to 2008. This situation was reflected in the plots of historical median rental price and count of 79 LGAs among Vcitoria, where there was a boost on the rental price. The median rental price started to climb from the beginning of 2007, which could be resulted from the desire of cash by the property owners during the low tide of the economy. As for the median count of the leased properties, we can notice there was a decrease on rental properties at the beginnig of 2007, followed by a continuously growing amout. It could be resulted from the government's low interest rate and expansionary budget which encouraged people to consume instead of putting money into the bank, and this could explain why the median count started to pick up in mid 2007 and reached a peak in 2008 where meanwihle the rental price was continuously growing. Looking at the plot, we can notice there's a negative relationship between the distance to CBD and the rental price for a certain LGA, as the CBD is meant to be the financial and economic centre, where people mostly work in. Therefore, people would desire to live closer to CBD, and the over-demanded rental properties and limited developing residential area lead to a high rental price in CBD and areas arond it. 
