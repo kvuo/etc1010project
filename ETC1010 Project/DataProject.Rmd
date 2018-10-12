@@ -124,179 +124,6 @@ ggplotly(m)
 ```
 
 ```{r}
-testvar <- all_medianp %>%  
-  mutate(date=paste("01-",month,"-",year)) %>% 
-  mutate(date=dmy(date)) %>% 
-  select("Suburb","values","date") %>%
-  mutate(values=as.numeric(values))
-#glimpse(testvar)
-ticks<-c(100,200,300,400,500,600)
-testgraph <- testvar %>% ggplot(aes(x=date,y=values,colour=Suburb,yaxt="n"))+geom_line() #geom_smooth(se=FALSE)#+geom_point()+geom_smooth(se=FALSE)#+scale_y_discrete(limits=600)
-
-ggplotly(testgraph)
-```
-
-
-
-```{r echo=FALSE}
-agegroup_2017 <- read_xls("data/2017.xls",sheet = "Table 3") 
-agegroup_2017<-agegroup_2017[-c(1:8),-c(1)]
-agegroup_2017<-agegroup_2017[,-c(2:6)]
-agegroup_2017<-agegroup_2017[,-c(3:4)] 
-agegroup_2017<-agegroup_2017 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'pop'=c(21)) %>%
-  filter(state=="Victoria")
-```
-
-```{r echo=FALSE} 
-agegroup_2016 <- read_xls("data/2006_2016.xls",sheet = "Table 6") 
-agegroup_2016<-agegroup_2016[-c(1:8),-c(1)]
-agegroup_2016<-agegroup_2016[,-c(2:6)]
-agegroup_2016<-agegroup_2016[,-c(3:4)]
-agegroup_2016<-agegroup_2016 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2006 <- read_xls("data/2006_2016.xls",sheet = "Table 3") 
-agegroup_2006<-agegroup_2006[-c(1:8),-c(1)]
-agegroup_2006<-agegroup_2006[,-c(2:6)]
-agegroup_2006<-agegroup_2006[,-c(3:4)]
-agegroup_2006<-agegroup_2006 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2015 <- read_xls("data/2010_2015.xls",sheet = "Table 6") 
-agegroup_2015<-agegroup_2015[-c(1:7),-c(1)]
-agegroup_2015<-agegroup_2015[,-c(2:6)]
-agegroup_2015<-agegroup_2015[,-c(3:4)]
-agegroup_2015<-agegroup_2015 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2010 <- read_xls("data/2010_2015.xls",sheet = "Table 3") 
-agegroup_2010<-agegroup_2010[-c(1:7),-c(1)]
-agegroup_2010<-agegroup_2010[,-c(2:6)]
-agegroup_2010<-agegroup_2010[,-c(3:4)]
-agegroup_2010<-agegroup_2010 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2014 <- read_xls("data/2009_2014.xls",sheet = "Table 6") 
-agegroup_2014<-agegroup_2014[-c(1:8),-c(1)]
-agegroup_2014<-agegroup_2014[,-c(2:6)]
-agegroup_2014<-agegroup_2014[,-c(3:4)]
-agegroup_2014<-agegroup_2014 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2009 <- read_xls("data/2009_2014.xls",sheet = "Table 3") 
-agegroup_2009<-agegroup_2009[-c(1:8),-c(1)]
-agegroup_2009<-agegroup_2009[,-c(2:6)]
-agegroup_2009<-agegroup_2009[,-c(3:4)]
-agegroup_2009<-agegroup_2009 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2013<- read_xls("data/2008_2013.xls",sheet = "Table 6") 
-agegroup_2013<-agegroup_2013[-c(1:8),-c(1)]
-agegroup_2013<-agegroup_2013[,-c(2:6)]
-agegroup_2013<-agegroup_2013[,-c(3:4)]
-agegroup_2013<-agegroup_2013 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2008 <- read_xls("data/2008_2013.xls",sheet = "Table 3") 
-agegroup_2008<-agegroup_2008[-c(1:8),-c(1)]
-agegroup_2008<-agegroup_2008[,-c(2:6)]
-agegroup_2008<-agegroup_2008[,-c(3:4)]
-agegroup_2008<-agegroup_2008 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2012 <- read_xls("data/2011_2012.xls",sheet = "Table 6") 
-agegroup_2012<-agegroup_2012[-c(1:8),-c(1)]
-agegroup_2012<-agegroup_2012[,-c(2:6)]
-agegroup_2012<-agegroup_2012[,-c(3:4)]
-agegroup_2012<-agegroup_2012 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2011 <- read_xls("data/2011_2012.xls",sheet = "Table 3") 
-agegroup_2011<-agegroup_2011[-c(1:8),-c(1)]
-agegroup_2011<-agegroup_2011[,-c(2:6)]
-agegroup_2011<-agegroup_2011[,-c(3:4)]
-agegroup_2011<-agegroup_2011 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2014 <- read_xls("data/2009_2014.xls",sheet = "Table 6") 
-agegroup_2014<-agegroup_2014[-c(1:8),-c(1)]
-agegroup_2014<-agegroup_2014[,-c(2:6)]
-agegroup_2014<-agegroup_2014[,-c(3:4)]
-agegroup_2014<-agegroup_2014 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-```{r echo=FALSE}
-agegroup_2007 <- read_xls("data/2007.xls",sheet = "Table 3") 
-agegroup_2007<-agegroup_2007[-c(1:8),-c(1)]
-agegroup_2007<-agegroup_2007[,-c(2:6)]
-agegroup_2007<-agegroup_2007[,-c(3:4)]
-agegroup_2007<-agegroup_2007 %>%
-  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
-```
-
-
-```{r echo=FALSE}
-abslgadata1 <- read_csv("data/ABS_REGIONAL_LGA2017-enp1.csv")
-abslgadata2 <- read_csv("data/ABS_REGIONAL_LGA2017-enp2.csv")
-abslgadata <- rbind(abslgadata1,abslgadata2) %>% select(-MEASURE,-REGIONTYPE,-`Geography Level`,-LGA_2017,-FREQUENCY,-Frequency,-TIME,-`Flag Codes`,-Flags)
-#unique(abslgadata$`Data item`) #Shows unique data items within abslgadata
-#unique(abslgadata$Region) #Shows unique LGAs within abslgadata
-glimpse(abslgadata)
-```
-
-```{r}
-pop_2017<-agegroup_2017 %>%
-  mutate(pop = as.numeric(pop)) %>%
-  group_by(LGA) %>%
-  dplyr::summarise(pop = sum(pop, na.rm = TRUE))
-ggplot(pop_2017, aes(x=pop, y=LGA)) +geom_point()
-```
-#plot the population distribution in a map
-```{r}
-popdis_2017<-full_join(pop_2017, LGA, by=c("LGA"="LGA")) %>%
-  filter(!is.na(lat), !is.na(lon), !is.na(pop))
-lgamap <- get_map(location = c(lon = 144.7852, lat = -37.4713), zoom=6)
-ggmap(lgamap) +geom_point(popdis_2017, aes(x=lon,y=lat,colour=pop), size=4, alpha=0.7)+
-  scale_colour_distiller(palette="YlOrRd")
-```
-
-
-#plot the rental prices distribution in a map
-```{r}
-rent2017<-filter(all_medianp, year=="2017") %>%
-  mutate(values=as.numeric(values), Suburb=as.factor(Suburb)) %>%
-  group_by(Suburb) %>% dplyr::summarise(n = mean(values, na.rm = TRUE))
-left_join(rent2017, LGA, by=c("Suburb"="LGA")) %>%
-  select(Suburb, n, lat, lon) %>%
-  filter(!is.na(lat),!is.na(lon))
-lgamap <- get_map(location=c(144.9631, -37.8136), zoom=14)
-ggmap(lgamap) +geom_point(aes(x=lat,y=lon,colour=n), size=4, alpha=0.7)+
-  scale_colour_distiller(palette="YlOrRd")
-rent2017
-```
-```{r}
 abslgadata1 <- read_csv("data/ABS_REGIONAL_LGA2017-enp1.csv")
 abslgadata2 <- read_csv("data/ABS_REGIONAL_LGA2017-enp2.csv")
 abslgaviclgas <- read_xlsx("data/abslgaviclgas.xlsx")
@@ -490,24 +317,213 @@ ggplotly(medianrentcts_plot)
 The analysis carried out was aimed to look at if the economic condition would have an impact on rental price in victoria, and effect of the distance from the local area to Melbourne CBD to the rental price. The GFC started in 2007 along to 2008 was taken as an example, and we can notice there was downward pressure on Australian economic growth starting from 2006 to 2008. This situation was reflected in the plots of historical median rental price and count of 79 LGAs among Vcitoria, where there was a boost on the rental price. The median rental price started to climb from the beginning of 2007, which could be resulted from the desire of cash by the property owners during the low tide of the economy. As for the median count of the leased properties, we can notice there was a decrease on rental properties at the beginnig of 2007, followed by a continuously growing amout. It could be resulted from the government's low interest rate and expansionary budget which encouraged people to consume instead of putting money into the bank, and this could explain why the median count started to pick up in mid 2007 and reached a peak in 2008 where meanwihle the rental price was continuously growing. Looking at the plot, we can notice there's a negative relationship between the distance to CBD and the rental price for a certain LGA, as the CBD is meant to be the financial and economic centre, where people mostly work in. Therefore, people would desire to live closer to CBD, and the over-demanded rental properties and limited developing residential area lead to a high rental price in CBD and areas arond it. 
 
 
-
-
-
-
-=======
-get_distance = read_csv('data/LGA_Profile_2014_beta.csv')
-get_distance <- get_distance[,c(2,9)]
-get_distance <- get_distance %>% separate(LGA, sep = "[()]",c("LGA","index"))
-
-get_distance$LGA <- trim.trailing(get_distance$LGA)
-get_distance <- get_distance[,-2]
-glimpse(get_distance)
-
-loc_2018_added_dis <- left_join(loc_2018,get_distance,by = "LGA")
-
-p <- ggplot(loc_2018_added_dis, aes(x=Distance_to_Melbourne_in_km, y=values,label = LGA)) + geom_point() + ylab("Rental Price") + ggtitle("Price changed by distance to Melbourne CBD in 2018")
-
-ggplotly(p)
->>>>>>> eef71a3b2db5e21cfbd82bb67a8d2617180af088
+```{r}
+agegroup_2017 <- read_xls("data/2017.xls",sheet = "Table 3") 
+agegroup_2017<-agegroup_2017[-c(1:8),-c(1)]
+agegroup_2017<-agegroup_2017[,-c(2:6)]
+agegroup_2017<-agegroup_2017[,-c(3:4)] 
+agegroup_2017<-agegroup_2017 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'pop'=c(21)) %>%
+  filter(state=="Victoria")
 ```
+
+```{r}
+agegroup_2016 <- read_xls("data/2006_2016.xls",sheet = "Table 6") 
+agegroup_2016<-agegroup_2016[-c(1:8),-c(1)]
+agegroup_2016<-agegroup_2016[,-c(2:6)]
+agegroup_2016<-agegroup_2016[,-c(3:4)]
+agegroup_2016<-agegroup_2016 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2006 <- read_xls("data/2006_2016.xls",sheet = "Table 3") 
+agegroup_2006<-agegroup_2006[-c(1:8),-c(1)]
+agegroup_2006<-agegroup_2006[,-c(2:6)]
+agegroup_2006<-agegroup_2006[,-c(3:4)]
+agegroup_2006<-agegroup_2006 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2015 <- read_xls("data/2010_2015.xls",sheet = "Table 6") 
+agegroup_2015<-agegroup_2015[-c(1:7),-c(1)]
+agegroup_2015<-agegroup_2015[,-c(2:6)]
+agegroup_2015<-agegroup_2015[,-c(3:4)]
+agegroup_2015<-agegroup_2015 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2010 <- read_xls("data/2010_2015.xls",sheet = "Table 3") 
+agegroup_2010<-agegroup_2010[-c(1:7),-c(1)]
+agegroup_2010<-agegroup_2010[,-c(2:6)]
+agegroup_2010<-agegroup_2010[,-c(3:4)]
+agegroup_2010<-agegroup_2010 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2014 <- read_xls("data/2009_2014.xls",sheet = "Table 6") 
+agegroup_2014<-agegroup_2014[-c(1:8),-c(1)]
+agegroup_2014<-agegroup_2014[,-c(2:6)]
+agegroup_2014<-agegroup_2014[,-c(3:4)]
+agegroup_2014<-agegroup_2014 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2009 <- read_xls("data/2009_2014.xls",sheet = "Table 3") 
+agegroup_2009<-agegroup_2009[-c(1:8),-c(1)]
+agegroup_2009<-agegroup_2009[,-c(2:6)]
+agegroup_2009<-agegroup_2009[,-c(3:4)]
+agegroup_2009<-agegroup_2009 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2013<- read_xls("data/2008_2013.xls",sheet = "Table 6") 
+agegroup_2013<-agegroup_2013[-c(1:8),-c(1)]
+agegroup_2013<-agegroup_2013[,-c(2:6)]
+agegroup_2013<-agegroup_2013[,-c(3:4)]
+agegroup_2013<-agegroup_2013 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2008 <- read_xls("data/2008_2013.xls",sheet = "Table 3") 
+agegroup_2008<-agegroup_2008[-c(1:8),-c(1)]
+agegroup_2008<-agegroup_2008[,-c(2:6)]
+agegroup_2008<-agegroup_2008[,-c(3:4)]
+agegroup_2008<-agegroup_2008 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2012 <- read_xls("data/2011_2012.xls",sheet = "Table 6") 
+agegroup_2012<-agegroup_2012[-c(1:8),-c(1)]
+agegroup_2012<-agegroup_2012[,-c(2:6)]
+agegroup_2012<-agegroup_2012[,-c(3:4)]
+agegroup_2012<-agegroup_2012 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2011 <- read_xls("data/2011_2012.xls",sheet = "Table 3") 
+agegroup_2011<-agegroup_2011[-c(1:8),-c(1)]
+agegroup_2011<-agegroup_2011[,-c(2:6)]
+agegroup_2011<-agegroup_2011[,-c(3:4)]
+agegroup_2011<-agegroup_2011 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2014 <- read_xls("data/2009_2014.xls",sheet = "Table 6") 
+agegroup_2014<-agegroup_2014[-c(1:8),-c(1)]
+agegroup_2014<-agegroup_2014[,-c(2:6)]
+agegroup_2014<-agegroup_2014[,-c(3:4)]
+agegroup_2014<-agegroup_2014 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+```{r}
+agegroup_2007 <- read_xls("data/2007.xls",sheet = "Table 3") 
+agegroup_2007<-agegroup_2007[-c(1:8),-c(1)]
+agegroup_2007<-agegroup_2007[,-c(2:6)]
+agegroup_2007<-agegroup_2007[,-c(3:4)]
+agegroup_2007<-agegroup_2007 %>%
+  select('state'=c(1),'LGA'=c(2),'0-4'=c(3),'5-9'=c(4),'10-14'=c(5),'15-19'=c(6),'20-24'=c(7),'25-29'=c(8),'30-34'=c(9),'35-39'=c(10),'40-44'=c(11),'45-49'=c(12),'50-54'=c(13),'55-59'=c(14),'60-64'=c(15),'65-69'=c(16),'70-74'=c(17),'75-79'=c(18),'80-84'=c(19),'85 and over'=c(20),'total persons'=c(21))
+```
+
+
+```{r}
+abslgadata1 <- read_csv("data/ABS_REGIONAL_LGA2017-enp1.csv")
+abslgadata2 <- read_csv("data/ABS_REGIONAL_LGA2017-enp2.csv")
+abslgadata <- rbind(abslgadata1,abslgadata2) %>% select(-MEASURE,-REGIONTYPE,-`Geography Level`,-LGA_2017,-FREQUENCY,-Frequency,-TIME,-`Flag Codes`,-Flags)
+#unique(abslgadata$`Data item`) #Shows unique data items within abslgadata
+#unique(abslgadata$Region) #Shows unique LGAs within abslgadata
+glimpse(abslgadata)
+```
+
+```{r}
+pop_2017<-agegroup_2017 %>%
+  mutate(pop = as.numeric(pop)) %>%
+  group_by(LGA) %>%
+  dplyr::summarise(pop = sum(pop, na.rm = TRUE))
+ggplot(pop_2017, aes(x=pop, y=LGA)) +geom_point()
+```
+#plot the population distribution in a map
+```{r,eval=FALSE}
+popdis_2017<-full_join(pop_2017, LGA, by=c("LGA"="LGA")) %>%
+  filter(!is.na(lat), !is.na(lon), !is.na(pop))
+vic <- get_map(location = c(lon=144.9631, lat=-37.8136), zoom=7)
+ggmap(vic) +geom_point(popdis_2017, aes(x=lon,y=lat,colour=pop), size=4, alpha=0.7)+
+  scale_colour_distiller(palette="YlOrRd")
+```
+
+
+#plot the rental prices distribution in a map
+```{r}
+rent2017<-filter(all_medianp, year=="2017") %>%
+  mutate(values=as.numeric(values), Suburb=as.factor(Suburb)) %>%
+  group_by(Suburb) %>% dplyr::summarise(n = median(values, na.rm = TRUE)) %>%
+  mutate(LGA=as.character(Suburb)) %>%
+left_join(LGA, by="LGA") %>%
+  select(LGA, n, lat, lon) %>%
+  filter(!is.na(lat),!is.na(lon))
+vic <- get_map(location=c(144.9631, -37.8136), zoom=14)
+ggmap(vic) +geom_point(aes(x=lon,y=lat,colour=n), size=4, alpha=0.7)+
+  scale_colour_distiller(palette="YlOrRd")
+rent2017
+```
+#combine the population and rental prices distribution 
+```{r}
+price_year<-all_medianp %>%
+  mutate(values=as.numeric(values), year=as.character(year)) %>%
+  group_by(year) %>%
+  dplyr::summarise(n=median(values,na.rm = TRUE)) %>%
+  mutate(year=as.numeric(year))
+p1<-ggplot(price_year, aes(x=year,y=n), alpha=0.9, size=3) +
+  geom_line() +
+  xlab("year") +
+  ylab("median rental price")
+pop_year <- read_xlsx("data/population-vic.xlsx")
+p2<-ggplot() +
+  geom_line(data=pop_year,aes(x=year,y=n)) +
+  xlab("year") +
+  ylab("total population in victoria")
+p1
+p2
+
+```
+Overall, both population and rental price have increased siginificantly over the past ten years. They are positively correlated. 
+
+
+
+
+```{r}
+price_year<-price_year %>%
+  mutate(factor="rent") %>%
+  filter(!(year %in% c("1999","2000","2001","2002","2003","2004","2005","2018"))) %>%
+  mutate(pct_change=(n/lag(n) - 1) * 100) %>%
+  filter(!is.na(pct_change))
+pop_year<-pop_year %>%
+  mutate(factor="population", pct_change=(n/lag(n) - 1) * 100) %>%
+  filter(!is.na(pct_change))
+pop_price<-bind_rows(pop_year,price_year)
+ggplot(pop_price,aes(x=year,y=pct_change,fill=factor)) +
+  geom_bar(stat = "identity",position="dodge") + 
+  geom_line()
+scale_fill_brewer(palette="Dark2")
+```
+####
+According to the bar chart, the growth rate of total population in victoria has kept stable compared with the rent change, which has flutuated remarkably over the past decade. Basically, the slight movement of population growth rate in victoria would result in remarkable changes in rental growth. To be more specifit, if there would be a increase in the population, the rental price would increase significantly in victoria, normally it would be reflected one year later, after the change of the population. For example, the growth rate of population peaked at 2008, and then it kept declining for the next three years. While, in terms of rental price, it rocked to 9.09% in 2008 and decreased considerablly in the following five years, which means that the movement of the population would signifiantly affect the change in the median rental price in victoria.     
+
+```{r}
+mod<-lm(price_year$pct_change~pop_year$pct_change)
+library(broom)
+tidy(mod)
+glance(mod)
+```
+According to the table, percentage change in rental price each year is negatively related with that of population, since the coefficient is negative. In regard to R-square, it shows 6.54% variations in growth rate in rental price are explained by the growth rate in population. 
 
